@@ -1,3 +1,4 @@
+![TE](https://github.com/Shubham25104/OH24-CPP-Java/assets/117568702/0cad3314-8e5f-4e73-b17c-cac3e380ebbc)
 # Simple Text Editor
 
 This is a simple text editor application created using Java Swing.
