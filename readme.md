@@ -1,3 +1,4 @@
+![E D](https://github.com/Shubham25104/OH24-CPP-Java/assets/117568702/80e98f33-e877-4cd0-b7b8-1b0d4b87162a)
 # Encoder Decoder Application
 
 The Encoder Decoder application is a Java program with a graphical user interface (GUI) that allows users to encode plaintext messages into ciphertext and decode ciphertext back into plaintext using various encoding algorithms.
