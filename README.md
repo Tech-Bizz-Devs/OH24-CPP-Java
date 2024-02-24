@@ -1,1 +1,0 @@
-JAVA/CPP repo for OPENHACK.
