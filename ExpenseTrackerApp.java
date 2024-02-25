@@ -1,11 +1,13 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ExpenseTrackerApp extends JFrame {
 
-    private JTextArea expenseListArea;
+    private JTable expenseTable;
+    private DefaultTableModel tableModel;
     private double totalExpenses = 0.0;
     private Double budget = null;
 
@@ -17,6 +19,23 @@ public class ExpenseTrackerApp extends JFrame {
 
         // Main panel
         JPanel mainPanel = new JPanel(new BorderLayout());
+
+        // Menu bar
+        JMenuBar menuBar = new JMenuBar();
+        JMenu searchMenu = new JMenu("Search");
+        JMenuItem searchByCategory = new JMenuItem("Search by Category");
+        searchByCategory.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String category = JOptionPane.showInputDialog(null, "Enter category to search:");
+                if (category != null && !category.isEmpty()) {
+                    searchExpensesByCategory(category);
+                }
+            }
+        });
+        searchMenu.add(searchByCategory);
+        menuBar.add(searchMenu);
+        setJMenuBar(menuBar);
 
         // Expense Input Panel
         JPanel expenseInputPanel = new JPanel(new GridLayout(3, 2, 5, 5));
@@ -47,15 +66,15 @@ public class ExpenseTrackerApp extends JFrame {
         expenseInputPanel.add(descriptionLabel);
         expenseInputPanel.add(descriptionField);
 
-        // Expense List Panel
-        JPanel expenseListPanel = new JPanel(new BorderLayout());
-        expenseListPanel.setBorder(BorderFactory.createTitledBorder("Expense List"));
+        // Expense Table Panel
+        JPanel expenseTablePanel = new JPanel(new BorderLayout());
+        expenseTablePanel.setBorder(BorderFactory.createTitledBorder("Expense List"));
 
-        expenseListArea = new JTextArea();
-        expenseListArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(expenseListArea);
+        tableModel = new DefaultTableModel(new Object[]{"Amount", "Category", "Description"}, 0);
+        expenseTable = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(expenseTable);
 
-        expenseListPanel.add(scrollPane, BorderLayout.CENTER);
+        expenseTablePanel.add(scrollPane, BorderLayout.CENTER);
 
         // Budget Panel
         JPanel budgetPanel = new JPanel(new BorderLayout());
@@ -111,7 +130,7 @@ public class ExpenseTrackerApp extends JFrame {
         summaryPanel.add(budgetUtilizationButton, BorderLayout.SOUTH);
 
         mainPanel.add(expenseInputPanel, BorderLayout.NORTH);
-        mainPanel.add(expenseListPanel, BorderLayout.CENTER);
+        mainPanel.add(expenseTablePanel, BorderLayout.CENTER);
         mainPanel.add(budgetPanel, BorderLayout.WEST);
         mainPanel.add(summaryPanel, BorderLayout.SOUTH);
 
@@ -139,8 +158,12 @@ public class ExpenseTrackerApp extends JFrame {
 
         double amount = Double.parseDouble(amountStr);
         totalExpenses += amount;
-        String expense = String.format("Amount: $%.2f | Category: %s | Description: %s\n", amount, category, description);
-        expenseListArea.append(expense);
+        Object[] rowData = {String.format("$%.2f", amount), category, description};
+        tableModel.addRow(rowData);
+
+        if (budget != null && totalExpenses > budget) {
+            JOptionPane.showMessageDialog(null, "Warning: Total expenses have exceeded the budget!");
+        }
     }
 
     private void clearFields(JTextField... fields) {
@@ -160,6 +183,21 @@ public class ExpenseTrackerApp extends JFrame {
 
     private void showError(String message) {
         JOptionPane.showMessageDialog(null, message, "Input Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void searchExpensesByCategory(String category) {
+        DefaultTableModel filteredModel = new DefaultTableModel(new Object[]{"Amount", "Category", "Description"}, 0);
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            if (tableModel.getValueAt(i, 1).toString().equalsIgnoreCase(category)) {
+                filteredModel.addRow(new Object[]{tableModel.getValueAt(i, 0), tableModel.getValueAt(i, 1), tableModel.getValueAt(i, 2)});
+            }
+        }
+        if (filteredModel.getRowCount() > 0) {
+            JTable filteredTable = new JTable(filteredModel);
+            JOptionPane.showMessageDialog(null, new JScrollPane(filteredTable), "Expenses for Category '" + category + "'", JOptionPane.PLAIN_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "No expenses found for Category '" + category + "'.");
+        }
     }
 
     public static void main(String[] args) {
