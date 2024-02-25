@@ -2,7 +2,6 @@
 
 Versatile Text Editor is a simple yet powerful text editing application developed in Java using Swing. This text editor provides users with a user-friendly graphical interface for creating, editing, and saving text documents. It also supports the capability to edit multiple text files simultaneously, offering flexibility for users managing various documents.
 
-
 ## Features
 
 1. **Create New File:** Open a new tab with an untitled document, ready for editing.
