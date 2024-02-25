@@ -1,7 +1,10 @@
+
 # Expense Tracker Application
 
 ## Description
 This is a simple expense tracker application with a graphical user interface (GUI) built using Java Swing. It allows users to input their expenses, categorize them, and track their spending. Users can also set a budget and get insights into their spending habits and financial health.
+
+![ETA](https://github.com/Shubham25104/OH24-CPP-Java/assets/117568702/9c0133cc-13a6-4867-9d5f-5f0276b04372)
 
 ## Features
 - Add expenses with amount, category, and description fields.
